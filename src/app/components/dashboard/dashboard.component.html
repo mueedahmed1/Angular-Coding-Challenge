@@ -1,0 +1,63 @@
+  <div class="d-flex justify-content-between">
+    <div class="col-md-5">
+      <small><strong> {{ stashArr.length }}</strong> Result(s) Found</small>
+    </div>
+    <div class="col-md-5 text-right">
+      <mat-slide-toggle
+        class="example-margin"
+        [color]="color"
+        [checked]="checked"
+        [disabled]="disabled"
+        (change)="toggleFunction($event)"
+      >
+        <small> Auto Data Retrieval after <strong>30 seconds</strong> </small>
+      </mat-slide-toggle>
+      <br />
+      <input
+        class="form-control mt-3"
+        type="text"
+        name="search"
+        [(ngModel)]="search"
+        placeholder="Search"
+      />
+    </div>
+  </div>
+
+  <div class="mt-3 table-responsive">
+    <table class="table table-striped" *ngIf="stashArr.length">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">League</th>
+          <th scope="col">Account Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let s of stashArr
+              | filter: search
+              | paginate: { itemsPerPage: 10, currentPage: pageNumber };
+            let j = index
+          "
+          class="row-style"
+        >
+          <td>{{ s["id"] }}</td>
+          <td>{{ s["league"] }}</td>
+          <td>{{ s["accountName"] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-secondary" role="alert" *ngIf="!stashArr.length">
+    No Data Available
+  </div>
+  <div class="d-flex justify-content-center">
+    <pagination-controls
+      (pageChange)="pageNumber = $event"
+      *ngIf="stashArr.length"
+      class="pagination d-flex justify-center"
+    >
+    </pagination-controls>
+  </div>
